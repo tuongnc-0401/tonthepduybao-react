@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import AuthLayout from '~/layouts/AuthLayout'
 import AppLoading from '~/components/sections/AppLoading'
+import { useAuthStore } from '~/stores/auth'
 
 const Login = lazy(() => import('~/views/Login'))
 const NotFound = lazy(() => import('~/views/NotFound'))
@@ -30,6 +31,12 @@ const SiteProductCategory = lazy(() => import('~/views/SiteManagement/SiteProduc
 const SiteSetting = lazy(() => import('~/views/SiteManagement/SiteSetting'))
 
 export default function App() {
+  const checkAuth = useAuthStore((s) => s.checkAuth)
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
   return (
     <Suspense fallback={<AppLoading forceShow />}>
       <Routes>
