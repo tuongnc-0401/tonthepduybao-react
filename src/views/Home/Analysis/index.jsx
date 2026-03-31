@@ -78,7 +78,7 @@ export default function Analysis() {
           <Select
             placeholder="Chọn chi nhánh"
             className="w-[240px] ml-4"
-            options={branchStore.allBranchOptions}
+            options={branchStore.getAllBranchOptions()}
             value={branch}
             onChange={setBranch}
           />

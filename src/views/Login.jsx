@@ -60,7 +60,7 @@ export default function Login() {
             <Select
               placeholder="Chọn chi nhánh"
               className="w-full"
-              options={branchStore.allBranchOptions}
+              options={branchStore.getAllBranchOptions()}
               value={formState.branchId}
               onChange={(val) => setFormState((s) => ({ ...s, branchId: val }))}
             />
