@@ -91,9 +91,9 @@ export default function ListProduct() {
               trigger="click"
               placement="bottom"
               content={
-                branchStore.branchOptions.length !== 0 && (
+                branchStore.getBranchOptions().length !== 0 && (
                   <Checkbox.Group
-                    options={branchStore.branchOptions}
+                    options={branchStore.getBranchOptions()}
                     value={filter.branchId}
                     className="flex flex-col"
                     onChange={(val) => {
