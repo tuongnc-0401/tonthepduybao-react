@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Popconfirm, Tag, Popover, CheckboxGroup } from 'antd'
-import { Checkbox } from 'antd'
+import { Table, Button, Popconfirm, Tag, Popover, Checkbox } from 'antd'
 import { Icon } from '@iconify/react'
 import { useMessage, useMoment } from '~/composables'
 import { MSG, USER_STATUS } from '~/modules/constant'
