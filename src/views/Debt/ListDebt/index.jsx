@@ -30,7 +30,7 @@ export default function ListDebt() {
 
   const selectedCustomer = useMemo(
     () =>
-      (customerStore.allCustomer?.data || [])
+      (customerStore.allCustomer?.data?.customers || [])
         .filter((item) => filter.customerId.includes(item.id))
         .map((item) => item.name)
         .join(', '),
@@ -106,9 +106,9 @@ export default function ListDebt() {
                         customerStore.getAll({ page: 1, pageSize: 1000, search: filter.customerSearch })
                     }}
                   />
-                  {(customerStore.allCustomer?.data || []).length !== 0 ? (
+                  {(customerStore.allCustomer?.data?.customers || []).length !== 0 ? (
                     <Checkbox.Group
-                      options={(customerStore.allCustomer?.data || []).map((item) => ({ label: item.name, value: item.id }))}
+                      options={(customerStore.allCustomer?.data?.customers || []).map((item) => ({ label: item.name, value: item.id }))}
                       value={filter.customerId}
                       className="flex flex-col"
                       onChange={(val) => { setFilter((f) => ({ ...f, customerId: val })); init(currentPage) }}
