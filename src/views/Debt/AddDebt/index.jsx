@@ -474,7 +474,7 @@ export default function AddDebt() {
           <label><span className="text-red-500">*</span> Nhà cung cấp</label>
           <Select
             value={formState.customerId}
-            options={customerStore.customerOptions}
+            options={customerStore.getCustomerOptions()}
             filterOption={customFilter}
             showSearch
             placeholder="Chọn nhà cung cấp"

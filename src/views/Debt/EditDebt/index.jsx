@@ -508,7 +508,7 @@ export default function EditDebt() {
           <Select
             value={formState.customerId}
             allowClear
-            options={customerStore.customerOptions}
+            options={customerStore.getCustomerOptions()}
             showSearch
             placeholder="Chọn nhà cung cấp"
             className="w-full mt-1"

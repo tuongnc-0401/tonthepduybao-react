@@ -411,7 +411,7 @@ export default function EditInvoice() {
             <Select
               value={formState.customerId}
               allowClear
-              options={customerStore.customerOptions}
+              options={customerStore.getCustomerOptions()}
               filterOption={customFilter}
               showSearch
               placeholder="Chọn khách hàng"

@@ -54,6 +54,12 @@ export default function AddInvoice() {
     initFormOptions()
   }, [])
 
+  useEffect(() => {
+    if (formState.branchId) {
+      productStore.getAllOption({ branchId: formState.branchId })
+    }
+  }, [formState.branchId])
+
   const clearValidate = (errorName, index = -1) => {
     setFormErrors((prev) => {
       const next = { ...prev }
@@ -185,8 +191,12 @@ export default function AddInvoice() {
 
   const initShippingAddress = async (customerId) => {
     await shippingAddressStore.getAll({ customerId })
-    const defaultAddress = shippingAddressStore.shippingAddresses.find((item) => item.defaultAddress)
-    setFormState((s) => ({ ...s, shippingAddressId: defaultAddress ? defaultAddress.id : null }))
+    const shippingAddresses = shippingAddressStore.getShippingAddresses()
+    const defaultAddress = shippingAddresses.find((item) => item.defaultAddress)
+    setFormState((s) => ({
+      ...s,
+      shippingAddressId: defaultAddress ? defaultAddress.id : (shippingAddresses.length === 1 ? shippingAddresses[0].id : s.shippingAddressId)
+    }))
   }
 
   const changeCustomer = async (id) => {
@@ -231,6 +241,8 @@ export default function AddInvoice() {
       mc.error(MSG.UPDATE_FAILED)
     }
   }
+
+  const shippingAddresses = shippingAddressStore.getShippingAddresses()
 
   const getRowClassName = (_, index) => {
     return formErrors.items && formErrors.items.find((e) => e.index === index)
@@ -352,7 +364,11 @@ export default function AddInvoice() {
               options={branchStore.getBranchOptions()}
               placeholder="Chọn chi nhánh"
               className="w-full"
-              onChange={(val) => { setFormState((s) => ({ ...s, branchId: val })); clearValidate('branchId') }}
+              onChange={(val) => {
+                setFormState((s) => ({ ...s, branchId: val }))
+                clearValidate('branchId')
+                productStore.getAllOption({ branchId: val })
+              }}
             />
             {formErrors.branchId && <p className="mb-0 text-red-500 mt-0.5 text-[12px]">{formErrors.branchId}</p>}
           </div>
@@ -376,7 +392,7 @@ export default function AddInvoice() {
             <Select
               value={formState.customerId}
               allowClear
-              options={customerStore.customerOptions}
+              options={customerStore.getCustomerOptions()}
               filterOption={customFilter}
               showSearch
               placeholder="Chọn khách hàng"
@@ -391,7 +407,7 @@ export default function AddInvoice() {
               <label><span className="text-red-500">*</span> Địa chỉ giao</label>
               <Button type="link" size="small" className="px-0" onClick={openShippingAddressModal}>Thêm địa chỉ giao hàng?</Button>
             </div>
-            {shippingAddressStore.shippingAddresses.length === 0 ? (
+            {shippingAddresses.length === 0 ? (
               <p className="text-right w-full text-gray-400 italic mt-2 text-lg">Chưa có địa chỉ giao hàng!</p>
             ) : (
               <div className="mt-1 max-h-[320px] overflow-y-auto">
@@ -400,7 +416,7 @@ export default function AddInvoice() {
                   className="grid grid-cols-1 gap-4"
                   onChange={(e) => { setFormState((s) => ({ ...s, shippingAddressId: e.target.value })); clearValidate('shippingAddressId') }}
                 >
-                  {shippingAddressStore.shippingAddresses.map((item) => (
+                  {shippingAddresses.map((item) => (
                     <Radio key={item.id} value={item.id} className="border border-slate-300 border-solid px-4 py-2">
                       <div className="w-full grid grid-cols-12 gap-x-8">
                         <div className="col-span-8">
