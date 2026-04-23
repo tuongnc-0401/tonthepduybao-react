@@ -1,44 +1,49 @@
-import { useState, useEffect } from 'react'
-import { Modal, Form, Input, Select, Radio, Button } from 'antd'
-import { cloneDeep, isNil } from 'lodash'
-import { Icon } from '@iconify/react'
-import { CUSTOMER_TYPE, CUSTOMER_TYPE_KEY } from '~/modules/constant'
-import { defEmptyCustomerName, defEmptyCustomerType } from '~/modules/formRule'
+import { useState, useEffect } from "react";
+import { Modal, Form, Input, Select, Radio, Button } from "antd";
+import { cloneDeep, isNil } from "lodash";
+import { Icon } from "@iconify/react";
+import { CUSTOMER_TYPE, CUSTOMER_TYPE_KEY } from "~/modules/constant";
+import { defEmptyCustomerName, defEmptyCustomerType } from "~/modules/formRule";
 
-export default function UpsertCustomerModal({ customer = null, onSubmit, onClose }) {
-  const [form] = Form.useForm()
-  const isEdit = !isNil(customer)
+export default function UpsertCustomerModal({
+  customer = null,
+  onSubmit,
+  onClose,
+}) {
+  const [form] = Form.useForm();
+  const [touchedFields, setTouchedFields] = useState({});
+  const isEdit = !isNil(customer);
 
   const initialFormState = {
     id: null,
-    name: '',
+    name: "",
     type: CUSTOMER_TYPE_KEY.CUSTOMER,
     phone: [],
-    email: '',
-    address: ''
-  }
+    email: "",
+    address: "",
+  };
 
   useEffect(() => {
     if (isEdit) {
-      const cloned = cloneDeep(customer)
-      form.setFieldsValue(cloned)
+      const cloned = cloneDeep(customer);
+      form.setFieldsValue(cloned);
     } else {
-      form.setFieldsValue(initialFormState)
+      form.setFieldsValue(initialFormState);
     }
-  }, [customer])
+  }, [customer]);
 
   const handleFinish = (values) => {
     const phone =
-      values.phone && values.phone.length !== 0 ? values.phone.join(',') : ''
-    onSubmit({ ...values, phone })
-  }
+      values.phone && values.phone.length !== 0 ? values.phone.join(",") : "";
+    onSubmit({ ...values, phone });
+  };
 
   return (
     <Modal
       open
       centered
       width="50vw"
-      title={`${isEdit ? 'Sửa' : 'Thêm'} thông tin khách hàng`}
+      title={`${isEdit ? "Sửa" : "Thêm"} thông tin khách hàng`}
       okText="Lưu"
       cancelText="Đóng"
       onOk={() => form.submit()}
@@ -49,12 +54,14 @@ export default function UpsertCustomerModal({ customer = null, onSubmit, onClose
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 18 }}
         onFinish={handleFinish}
+        validateTrigger="onBlur"
       >
         <Form.Item
           label="Tên khách hàng"
           name="name"
           rules={[{ required: true, validator: defEmptyCustomerName }]}
-          hasFeedback
+          hasFeedback={touchedFields.name}
+          onBlur={() => setTouchedFields({ ...touchedFields, name: true })}
         >
           <Input />
         </Form.Item>
@@ -62,7 +69,8 @@ export default function UpsertCustomerModal({ customer = null, onSubmit, onClose
           label="Phân loại"
           name="type"
           rules={[{ required: true, validator: defEmptyCustomerType }]}
-          hasFeedback
+          hasFeedback={touchedFields.type}
+          onBlur={() => setTouchedFields({ ...touchedFields, type: true })}
         >
           <Radio.Group options={Object.values(CUSTOMER_TYPE)} />
         </Form.Item>
@@ -95,7 +103,7 @@ export default function UpsertCustomerModal({ customer = null, onSubmit, onClose
                   type="dashed"
                   block
                   className="flex items-center justify-center"
-                  onClick={() => add('')}
+                  onClick={() => add("")}
                 >
                   <Icon icon="ic:round-plus" width="24px" />
                   Thêm số điện thoại
@@ -105,13 +113,24 @@ export default function UpsertCustomerModal({ customer = null, onSubmit, onClose
           )}
         </Form.List>
 
-        <Form.Item label="Email" name="email" hasFeedback>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[{ type: "email", message: "Email không hợp lệ" }]}
+          hasFeedback={touchedFields.email}
+          onBlur={() => setTouchedFields({ ...touchedFields, email: true })}
+        >
           <Input />
         </Form.Item>
-        <Form.Item label="Địa chỉ" name="address" hasFeedback>
+        <Form.Item
+          label="Địa chỉ"
+          name="address"
+          hasFeedback={touchedFields.address}
+          onBlur={() => setTouchedFields({ ...touchedFields, address: true })}
+        >
           <Input />
         </Form.Item>
       </Form>
     </Modal>
-  )
+  );
 }
