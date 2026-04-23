@@ -171,7 +171,7 @@ export default function CreateProduct() {
           <Select
             value={formState.branch}
             allowClear
-            options={branchStore.branchOptions}
+            options={branchStore.getBranchOptions()}
             placeholder="Chọn chi nhánh"
             className="w-full"
             onChange={(val) => { setFormState((s) => ({ ...s, branch: val })); clearValidate('branch') }}

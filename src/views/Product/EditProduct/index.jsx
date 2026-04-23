@@ -171,7 +171,7 @@ export default function EditProduct() {
         </div>
         <div className="col-span-3">
           <label><span className="text-red-500">*</span> Chi nhánh</label>
-          <Select value={formState.branch} allowClear options={branchStore.branchOptions} placeholder="Chọn chi nhánh" className="w-full" onChange={(val) => { setFormState((s) => ({ ...s, branch: val })); clearValidate('branch') }} />
+          <Select value={formState.branch} allowClear options={branchStore.getBranchOptions()} placeholder="Chọn chi nhánh" className="w-full" onChange={(val) => { setFormState((s) => ({ ...s, branch: val })); clearValidate('branch') }} />
           {formErrors.branch && <p className="mb-0 text-red-500 mt-0.5 text-[12px]">{formErrors.branch}</p>}
         </div>
         <div className="col-span-3">

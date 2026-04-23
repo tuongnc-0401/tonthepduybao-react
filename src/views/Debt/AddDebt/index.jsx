@@ -301,7 +301,7 @@ export default function AddDebt() {
           <Select
             value={record.branch}
             allowClear
-            options={branchStore.branchOptions}
+            options={branchStore.getBranchOptions()}
             placeholder="Chọn chi nhánh"
             className="w-full"
             onChange={(val) => {

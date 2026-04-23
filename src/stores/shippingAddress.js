@@ -6,6 +6,16 @@ const shippingAddressAPI = useShippingAddressAPI()
 export const useShippingAddressStore = create((set, get) => ({
   allShippingAddress: [],
 
+  get shippingAddresses() {
+    const all = get().allShippingAddress
+    const defaultAddress = all.find((item) => item.defaultAddress)
+    if (defaultAddress) {
+      const notDefault = all.filter((item) => item.id !== defaultAddress.id)
+      return [defaultAddress, ...notDefault]
+    }
+    return all
+  },
+
   getShippingAddresses: () => {
     const all = get().allShippingAddress
     const defaultAddress = all.find((item) => item.defaultAddress)

@@ -356,7 +356,7 @@ export default function EditDebt() {
           <Select
             value={record.branch}
             allowClear
-            options={branchStore.branchOptions}
+            options={branchStore.getBranchOptions()}
             placeholder="Chọn chi nhánh"
             className="w-full"
             onChange={(val) => {

@@ -384,7 +384,7 @@ export default function EditInvoice() {
             <Select
               value={formState.branchId}
               allowClear
-              options={branchStore.branchOptions}
+              options={branchStore.getBranchOptions()}
               placeholder="Chọn chi nhánh"
               className="w-full"
               onChange={(val) => { setFormState((s) => ({ ...s, branchId: val })); clearValidate('branchId') }}

@@ -349,7 +349,7 @@ export default function AddInvoice() {
             <label><span className="text-red-500">*</span> Chi nhánh</label>
             <Select
               value={formState.branchId}
-              options={branchStore.branchOptions}
+              options={branchStore.getBranchOptions()}
               placeholder="Chọn chi nhánh"
               className="w-full"
               onChange={(val) => { setFormState((s) => ({ ...s, branchId: val })); clearValidate('branchId') }}
