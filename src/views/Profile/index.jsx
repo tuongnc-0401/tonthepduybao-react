@@ -61,7 +61,7 @@ export default function Profile() {
 
   const formSubmit = async (values) => {
     try {
-      await userStore.update(values)
+      await userStore.update({...values, username: me.username})
       authStore.updateCurrentUser(userStore.me)
       initForm()
       mc.success(MSG.UPDATE_SUCCESS)
