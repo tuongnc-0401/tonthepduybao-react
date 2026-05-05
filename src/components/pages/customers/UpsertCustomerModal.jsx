@@ -35,8 +35,12 @@ export default function UpsertCustomerModal({
   const handleFinish = (values) => {
     const phone =
       values.phone && values.phone.length !== 0 ? values.phone.join(",") : "";
-    onSubmit({ ...values, phone });
-  };
+    const payload = { ...values, phone }
+    if (customer?.id) {
+      payload.id = customer.id
+    }
+    onSubmit(payload)
+  }
 
   return (
     <Modal
