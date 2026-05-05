@@ -1,7 +1,7 @@
-import { Table, Button, Popconfirm, Tag } from 'antd'
-import { Icon } from '@iconify/react'
-import { CUSTOMER_TABLE_COLUMNS } from '~/modules/table'
-import { CUSTOMER_TYPE } from '~/modules/constant'
+import { Table, Button, Popconfirm, Tag } from "antd";
+import { Icon } from "@iconify/react";
+import { CUSTOMER_TABLE_COLUMNS } from "~/modules/table";
+import { CUSTOMER_TYPE } from "~/modules/constant";
 
 export default function CustomerTable({
   data = [],
@@ -12,10 +12,10 @@ export default function CustomerTable({
   onInit,
   onEdit,
   onDelete,
-  onUndelete
+  onUndelete,
 }) {
   const columns = CUSTOMER_TABLE_COLUMNS.map((col) => {
-    if (col.key === 'contact') {
+    if (col.key === "contact") {
       return {
         ...col,
         render: (_, record) => (
@@ -23,7 +23,12 @@ export default function CustomerTable({
             {record.email && (
               <div className="flex items-center mb-2">
                 <Icon icon="mdi:email" width="16px" />
-                <a href={`mailto:${record.email}`} target="_blank" className="ml-2" rel="noreferrer">
+                <a
+                  href={`mailto:${record.email}`}
+                  target="_blank"
+                  className="ml-2"
+                  rel="noreferrer"
+                >
                   {record.email}
                 </a>
               </div>
@@ -48,23 +53,25 @@ export default function CustomerTable({
               </div>
             )}
           </div>
-        )
-      }
+        ),
+      };
     }
-    if (col.key === 'type') {
+    if (col.key === "type") {
       return {
         ...col,
-        render: (_, record) => CUSTOMER_TYPE[record.type]?.label
-      }
+        render: (_, record) => CUSTOMER_TYPE[record.type]?.label,
+      };
     }
-    if (col.key === 'action') {
+    if (col.key === "action") {
       return {
         ...col,
         render: (_, record) => (
           <div>
-            <Button type="link" onClick={() => onEdit && onEdit(record)}>
-              Sửa
-            </Button>
+            {!isUndelete && (
+              <Button type="link" onClick={() => onEdit && onEdit(record)}>
+                Sửa
+              </Button>
+            )}
             {isDelete && (
               <Popconfirm
                 title="Bạn có chắc muốn xoá khách hàng này không?"
@@ -90,11 +97,11 @@ export default function CustomerTable({
               </Popconfirm>
             )}
           </div>
-        )
-      }
+        ),
+      };
     }
-    return col
-  })
+    return col;
+  });
 
   return (
     <Table
@@ -105,8 +112,8 @@ export default function CustomerTable({
         showSizeChanger: false,
         total,
         pageSize,
-        onChange: (page) => onInit && onInit(page)
+        onChange: (page) => onInit && onInit(page),
       }}
     />
-  )
+  );
 }
