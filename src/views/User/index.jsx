@@ -22,7 +22,8 @@ export default function User() {
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState([])
   const [role, setRole] = useState([])
-  const [isShowCreateUserModal, setIsShowCreateUserModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [isShowModal, setIsShowModal] = useState(false)
 
   const init = async () => {
     await userStore.getAll({
@@ -41,11 +42,15 @@ export default function User() {
     init()
   }, [status, role])
 
-  const createUser = async (payload) => {
+  const upsertUser = async (payload) => {
     try {
-      await userStore.create(payload)
+      if (selectedUser?.id) {
+        await userStore.update(payload)
+      } else {
+        await userStore.create(payload)
+      }
       await init()
-      setIsShowCreateUserModal(false)
+      closeModal()
       mc.success(MSG.SAVE_SUCCESS)
     } catch {
       mc.error(MSG.SAVE_FAILED)
@@ -60,6 +65,16 @@ export default function User() {
     } catch {
       mc.error(MSG.DELETE_FAILED)
     }
+  }
+
+  const openModal = (user) => {
+    setSelectedUser(user)
+    setIsShowModal(true)
+  }
+
+  const closeModal = () => {
+    setSelectedUser(null)
+    setIsShowModal(false)
   }
 
   const columns = USER_TABLE_COLUMNS.map((col) => {
@@ -196,7 +211,7 @@ export default function User() {
           <Button
             type="primary"
             className="flex items-center"
-            onClick={() => setIsShowCreateUserModal(true)}
+            onClick={() => setIsShowModal(true)}
           >
             <Icon icon="mdi:plus-circle" width="16px" />
             <span className="ml-2">Tạo tài khoản</span>
@@ -212,10 +227,11 @@ export default function User() {
         pagination={false}
       />
 
-      {isShowCreateUserModal && (
+      {isShowModal && (
         <CreateUserModal
-          onOk={createUser}
-          onClose={() => setIsShowCreateUserModal(false)}
+          user={selectedUser}
+          onOk={upsertUser}
+          onClose={closeModal}
         />
       )}
     </section>
